@@ -1,0 +1,49 @@
+import simuPOP as sim
+
+## sets up the initial population with alleles at a single locus being recorded for individuals
+popTotal = 500000
+pop = sim.Population([popTotal/2, popTotal/2], loci=1, infoFields='fitness')
+
+## divides the initial population into two virtual subpopulations based on sex. this division
+## is the reason that the popTotal was divided by two when setting up the initial population
+pop.setVirtualSplitter(sim.SexSplitter())
+
+## sets up different simulations for the starting population, rep == number of duplications
+simu = sim.Simulator(pop, rep=10)
+
+## main code for evolution of population
+simu.evolve(
+
+    ## initOps == code applied before the evolutionary process
+     initOps=[
+         ## applies sex to all members of the entire population
+         sim.InitSex(),
+         ## sets the frequency of the VWD allele within the starting population
+         sim.InitGenotype(freq=[0.987, 0.013])
+     ],
+
+    ## preOps == code applied during the evolutionary process
+     preOps=[
+         ## applies the reduction in fitness determined by maternal mortality rates to all members of the female
+         ## subpopulation with the VWD allele
+         sim.MaSelector(loci=0, fitness=[1, .985, .985], subPops=[(0,0), (1,1)]),
+         ## applies the same fitness rate to all members of the male subpopulation, as they are unaffected by maternal
+         ## mortality
+         sim.MaSelector(loci=0, fitness=[1, 1, 1], subPops=[(0,1), (1,0)]),
+     ],
+
+    ## mating is done by matching up randomly selected females and males
+     matingScheme=sim.RandomMating(),
+
+    ## postOps == code applied after the evolutionary process, prints the generation number and allele frequency every
+    ## 10 generations for all simulations
+     postOps=[
+         sim.Stat(alleleFreq=0, step=10),
+         sim.PyEval("'Gen:%3d ' % gen", reps=0, step=10),
+         sim.PyEval(r"'%.3f\t' % alleleFreq[0][1]", step=10),
+         sim.PyOutput('\n', reps=-1, step=10)
+     ],
+
+    ## gen = number of generations the simlulation runs for
+     gen=100
+ )
