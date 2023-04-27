@@ -1,5 +1,5 @@
 # VWD_simupop_simulation
-This is the code used by the 2023 thesis paper by Maggie Brown, titled "An Evolutionary Perspective on von Willebrand Disease: Modeling the Effects of Natural Selection on the Frequency of von Willebrand Disease-Causing Alleles"
+This is the code used in the 2023 thesis paper by Maggie Brown, titled "An Evolutionary Perspective on von Willebrand Disease: Modeling the Effects of Natural Selection on the Frequency of von Willebrand Disease-Causing Alleles"
 
 In order to run this code, the simuPOP module must be downloaded. Instructions for download are available at https://simupop.sourceforge.net/. 
 
